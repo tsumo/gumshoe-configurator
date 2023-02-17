@@ -1,4 +1,4 @@
-import { SystemSkills, Term } from "./types";
+import { Skill, SystemSkills } from "./types";
 
 const academic = [
   { en: "Anthropology", ru: "Антропология" },
@@ -18,7 +18,7 @@ const academic = [
   { en: "Physics", ru: "Физика" },
   { en: "Law", ru: "Юриспруденция" },
   { en: "Languages", ru: "Языки" },
-] satisfies Term[];
+] satisfies Skill[];
 
 const interpersonal = [
   { en: "Bureaucracy", ru: "Бюрократия" },
@@ -31,7 +31,7 @@ const interpersonal = [
   { en: "Status", ru: "Статус" },
   { en: "Streetwise", ru: "Уличное чутьё" },
   { en: "Reassurence", ru: "Успокаивание" },
-] satisfies Term[];
+] satisfies Skill[];
 
 const technical = [
   { en: "Astronomy", ru: "Астрономия" },
@@ -44,9 +44,12 @@ const technical = [
   { en: "Pharmacy", ru: "Фармацевтика" },
   { en: "Photography", ru: "Фотография" },
   { en: "Chemistry", ru: "Химия" },
-] satisfies Term[];
+] satisfies Skill[];
 
 const general = [
+  { en: "Sanity", ru: "Рассудок", freePoints: 4 },
+  { en: "Stability", ru: "Самообладание", freePoints: 1 },
+  { en: "Health", ru: "Здоровье", freePoints: 1 },
   { en: "Athletics", ru: "Атлетика" },
   { en: "Conceal", ru: "Притворство" },
   { en: "Disguise", ru: "Маскировка" },
@@ -69,7 +72,7 @@ const general = [
   { en: "Stealth", ru: "Скрытность" },
   { en: "Weapons", ru: "Фехтование" },
   { en: "Magic", ru: "Магия" },
-] satisfies Term[];
+] satisfies Skill[];
 
 export const trailOfCthulhu = {
   general: {
@@ -93,4 +96,6 @@ export const trailOfCthulhu = {
       },
     ],
   },
+  generalPoints: 65,
+  investigativePoints: { 2: 24, 3: 18, "4plus": 16 },
 } satisfies SystemSkills;
