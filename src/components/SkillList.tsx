@@ -1,11 +1,16 @@
 import clsx from "clsx";
 import { useAppContext } from "../contexts/app-context";
+import { CharacterSkills } from "../engine/CharacterSkills";
 import { SkillList as SkillListType } from "../systems/types";
-import s from "./SkillList.module.css";
+import { SkillButton } from "./SkillButton";
+import s from "./styles.module.css";
 
-type Props = { list: SkillListType };
+type Props = {
+  list: SkillListType;
+  characterSkills: CharacterSkills;
+};
 
-export const SkillList = ({ list }: Props) => {
+export const SkillList = ({ list, characterSkills }: Props) => {
   const { lang } = useAppContext();
 
   return (
@@ -25,6 +30,14 @@ export const SkillList = ({ list }: Props) => {
                 )}
               >
                 {skill[lang]}: {totalValue}
+                <SkillButton
+                  onClick={() => characterSkills.decrementSkill(skill["en"])}
+                  text="-"
+                />
+                <SkillButton
+                  onClick={() => characterSkills.incrementSkill(skill["en"])}
+                  text="+"
+                />
               </li>
             );
           })}
