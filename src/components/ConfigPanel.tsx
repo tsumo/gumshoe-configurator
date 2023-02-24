@@ -19,7 +19,7 @@ export const ConfigPanel = () => {
   }, []);
 
   const decrementPlayersCount = useCallback(() => {
-    globalState.playersCount = Math.max(1, playersCount - 1);
+    globalState.playersCount = Math.max(2, playersCount - 1);
   }, [playersCount]);
 
   return (

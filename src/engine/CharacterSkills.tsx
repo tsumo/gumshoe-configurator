@@ -80,6 +80,15 @@ export class CharacterSkills {
     this.playersCount = n;
     this.recalculate();
   }
+
+  setOccupationalSkill(skillName: string, isOccupational: boolean) {
+    const skill =
+      this.findGeneralSkill(skillName) ||
+      this.findInvestigativeSkill(skillName);
+    if (!skill) throw new Error(`Skill not found: ${skillName}`);
+    skill.occupational = isOccupational;
+    this.recalculate();
+  }
 }
 
 export const useCharacterSkills = (system: SystemSkills) => {

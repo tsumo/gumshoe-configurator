@@ -2,7 +2,11 @@ export type Languages = "en" | "ru";
 
 export type Term = Record<Languages, string>;
 
-export type Skill = Term & { value?: number; freePoints?: number };
+export type Skill = Term & {
+  value?: number;
+  freePoints?: number;
+  occupational?: boolean;
+};
 
 export type SkillList = { name: Term; skills: Skill[] };
 
