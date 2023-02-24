@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useAppContext } from "../contexts/app-context";
+import { useGlobalStateSnapshot } from "../global-state";
 import { CharacterSkills } from "../engine/CharacterSkills";
 import { SkillList as SkillListType } from "../systems/types";
 import { SkillButton } from "./SkillButton";
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const SkillList = ({ list, characterSkills }: Props) => {
-  const { lang } = useAppContext();
+  const { lang } = useGlobalStateSnapshot();
 
   return (
     <>

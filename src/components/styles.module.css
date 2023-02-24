@@ -5,3 +5,7 @@
 .muted {
     opacity: 0.6;
 }
+
+.warning {
+    background-color: yellow;
+}
