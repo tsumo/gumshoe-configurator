@@ -1,15 +1,36 @@
 .underlined {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .bold {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .muted {
-    opacity: 0.6;
+  opacity: 0.6;
 }
 
 .warning {
-    background-color: yellow;
+  background-color: yellow;
+}
+
+.configPanel {
+  position: sticky;
+  top: 0;
+  padding: 12px 12px 6px;
+  background-color: white;
+  z-index: 1;
+  box-shadow: 0 5px 15px rgb(208, 208, 208);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.character {
+  margin: 0 12px;
+}
+
+.button {
+  padding: 0 6px;
+  margin: 0 4px;
 }

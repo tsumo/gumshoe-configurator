@@ -1,24 +1,24 @@
 import clsx from "clsx";
 import { useGlobalStateSnapshot } from "../global-state";
-import { CharacterSkills } from "../engine/CharacterSkills";
+import { SkillEngine } from "../engine/SkillEngine";
 import { Skill, SkillList as SkillListType } from "../systems/types";
-import { SkillButton } from "./SkillButton";
+import { Button } from "./Button";
 import s from "./styles.module.css";
 import { useCallback } from "react";
 
 type Props = {
   list: SkillListType;
-  characterSkills: CharacterSkills;
+  skillEngine: SkillEngine;
 };
 
-export const SkillList = ({ list, characterSkills }: Props) => {
+export const SkillList = ({ list, skillEngine }: Props) => {
   const { lang } = useGlobalStateSnapshot();
 
   const onOccupationalToggle = useCallback(
     (skill: Skill, isOccupational: boolean) => {
-      characterSkills.setOccupationalSkill(skill.en, isOccupational);
+      skillEngine.setOccupationalSkill(skill.en, isOccupational);
     },
-    [characterSkills]
+    [skillEngine]
   );
 
   return (
@@ -42,12 +42,12 @@ export const SkillList = ({ list, characterSkills }: Props) => {
                 )}
               >
                 {skill[lang]}: {totalValue}
-                <SkillButton
-                  onClick={() => characterSkills.decrementSkill(skill["en"])}
+                <Button
+                  onClick={() => skillEngine.decrementSkill(skill["en"])}
                   text="-"
                 />
-                <SkillButton
-                  onClick={() => characterSkills.incrementSkill(skill["en"])}
+                <Button
+                  onClick={() => skillEngine.incrementSkill(skill["en"])}
                   text="+"
                 />
                 <input

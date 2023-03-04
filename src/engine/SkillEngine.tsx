@@ -4,7 +4,7 @@ import { Skill, SkillList, SystemSkills } from "../systems/types";
 const sumSkills = (list: SkillList): number =>
   list.skills.reduce((prev, curr) => prev + (curr.value ?? 0), 0);
 
-export class CharacterSkills {
+export class SkillEngine {
   readonly system: SystemSkills;
   readonly trigger: VoidFunction;
   playersCount = 2;
@@ -91,10 +91,8 @@ export class CharacterSkills {
   }
 }
 
-export const useCharacterSkills = (system: SystemSkills) => {
+export const useSkillEngine = (system: SystemSkills) => {
   const reducer = useReducer((prev) => prev + 1, 0);
-  const [characterSkills] = useState(
-    () => new CharacterSkills(system, reducer[1])
-  );
-  return characterSkills;
+  const [skillEngine] = useState(() => new SkillEngine(system, reducer[1]));
+  return skillEngine;
 };
