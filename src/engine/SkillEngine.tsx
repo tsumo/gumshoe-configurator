@@ -58,20 +58,22 @@ export class SkillEngine {
     return skill;
   }
 
-  incrementSkill(skillName: string) {
+  private findSkill(skillName: string): Skill {
     const skill =
       this.findGeneralSkill(skillName) ||
       this.findInvestigativeSkill(skillName);
     if (!skill) throw new Error(`Skill not found: ${skillName}`);
+    return skill;
+  }
+
+  incrementSkill(skillName: string) {
+    const skill = this.findSkill(skillName);
     skill.value === undefined ? (skill.value = 1) : (skill.value += 1);
     this.recalculate();
   }
 
   decrementSkill(skillName: string) {
-    const skill =
-      this.findGeneralSkill(skillName) ||
-      this.findInvestigativeSkill(skillName);
-    if (!skill) throw new Error(`Skill not found: ${skillName}`);
+    const skill = this.findSkill(skillName);
     skill.value !== undefined && skill.value > 0 && (skill.value -= 1);
     this.recalculate();
   }
@@ -82,10 +84,7 @@ export class SkillEngine {
   }
 
   setOccupationalSkill(skillName: string, isOccupational: boolean) {
-    const skill =
-      this.findGeneralSkill(skillName) ||
-      this.findInvestigativeSkill(skillName);
-    if (!skill) throw new Error(`Skill not found: ${skillName}`);
+    const skill = this.findSkill(skillName);
     skill.occupational = isOccupational;
     this.recalculate();
   }
