@@ -1,4 +1,8 @@
-import { Skill, SystemSkills } from "./types";
+import {
+  convertSkillTemplatesToSkills,
+  SkillTemplate,
+  SystemSkills,
+} from "./types";
 
 const academic = [
   { en: "Anthropology", ru: "Антропология" },
@@ -18,7 +22,7 @@ const academic = [
   { en: "Physics", ru: "Физика" },
   { en: "Law", ru: "Юриспруденция" },
   { en: "Languages", ru: "Языки" },
-] satisfies Skill[];
+] satisfies SkillTemplate[];
 
 const interpersonal = [
   { en: "Bureaucracy", ru: "Бюрократия" },
@@ -31,7 +35,7 @@ const interpersonal = [
   { en: "Status", ru: "Статус" },
   { en: "Streetwise", ru: "Уличное чутьё" },
   { en: "Reassurence", ru: "Успокаивание" },
-] satisfies Skill[];
+] satisfies SkillTemplate[];
 
 const technical = [
   { en: "Astronomy", ru: "Астрономия" },
@@ -44,7 +48,7 @@ const technical = [
   { en: "Pharmacy", ru: "Фармацевтика" },
   { en: "Photography", ru: "Фотография" },
   { en: "Chemistry", ru: "Химия" },
-] satisfies Skill[];
+] satisfies SkillTemplate[];
 
 const general = [
   { en: "Sanity", ru: "Рассудок", freePoints: 4 },
@@ -72,27 +76,27 @@ const general = [
   { en: "Stealth", ru: "Скрытность" },
   { en: "Weapons", ru: "Фехтование" },
   { en: "Magic", ru: "Магия" },
-] satisfies Skill[];
+] satisfies SkillTemplate[];
 
 export const trailOfCthulhu = {
   general: {
     name: { en: "General", ru: "Общие" },
-    skills: general,
+    skills: convertSkillTemplatesToSkills(general),
   },
   investigative: {
     name: { en: "Investigative", ru: "Исследовательские" },
     branches: [
       {
         name: { en: "Academic", ru: "Научные" },
-        skills: academic,
+        skills: convertSkillTemplatesToSkills(academic),
       },
       {
         name: { en: "Interpersonal", ru: "Межличностные" },
-        skills: interpersonal,
+        skills: convertSkillTemplatesToSkills(interpersonal),
       },
       {
         name: { en: "Technical", ru: "Прикладные" },
-        skills: technical,
+        skills: convertSkillTemplatesToSkills(technical),
       },
     ],
   },

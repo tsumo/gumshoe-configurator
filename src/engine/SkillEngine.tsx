@@ -2,7 +2,7 @@ import { useReducer, useState } from "react";
 import { Skill, SkillList, SystemSkills } from "../systems/types";
 
 const sumSkills = (list: SkillList): number =>
-  list.skills.reduce((prev, curr) => prev + (curr.value ?? 0), 0);
+  list.skills.reduce((prev, curr) => prev + curr.value, 0);
 
 export class SkillEngine {
   readonly system: SystemSkills;
@@ -68,13 +68,13 @@ export class SkillEngine {
 
   incrementSkill(skillName: string) {
     const skill = this.findSkill(skillName);
-    skill.value === undefined ? (skill.value = 1) : (skill.value += 1);
+    skill.value += 1;
     this.recalculate();
   }
 
   decrementSkill(skillName: string) {
     const skill = this.findSkill(skillName);
-    skill.value !== undefined && skill.value > 0 && (skill.value -= 1);
+    skill.value > 0 && (skill.value -= 1);
     this.recalculate();
   }
 

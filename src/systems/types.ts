@@ -2,10 +2,12 @@ export type Languages = "en" | "ru";
 
 export type Term = Record<Languages, string>;
 
+export type SkillTemplate = Term & { freePoints?: number };
+
 export type Skill = Term & {
-  value?: number;
-  freePoints?: number;
-  occupational?: boolean;
+  value: number;
+  freePoints: number;
+  occupational: boolean;
 };
 
 export type SkillList = { name: Term; skills: Skill[] };
@@ -20,3 +22,14 @@ export type SystemSkills = {
     used: number;
   };
 };
+
+export const convertSkillTemplatesToSkills = (
+  templates: SkillTemplate[]
+): Skill[] =>
+  templates.map((t) => ({
+    en: t.en,
+    ru: t.ru,
+    freePoints: t.freePoints ?? 0,
+    value: 0,
+    occupational: false,
+  }));

@@ -28,20 +28,20 @@ export const SkillList = ({ list, skillEngine }: Props) => {
         {list.skills
           .sort((a, b) => a[lang].localeCompare(b[lang]))
           .map((skill) => {
-            const value = skill.value ?? 0;
             const totalValue =
-              (skill.occupational ? value * 2 : value) +
-              (skill.freePoints ?? 0);
+              (skill.occupational ? skill.value * 2 : skill.value) +
+              skill.freePoints;
             return (
-              <li
-                key={skill[lang]}
-                className={clsx(
-                  skill.freePoints !== undefined && s.underlined,
-                  skill.occupational && s.bold,
-                  totalValue === 0 && s.muted
-                )}
-              >
-                {skill[lang]}: {totalValue}
+              <li key={skill[lang]}>
+                <span
+                  className={clsx(
+                    skill.freePoints !== 0 && s.underlined,
+                    skill.occupational && s.bold,
+                    totalValue === 0 && s.muted
+                  )}
+                >
+                  {skill[lang]}: {totalValue}
+                </span>
                 <Button
                   onClick={() => skillEngine.decrementSkill(skill["en"])}
                   text="-"
@@ -52,7 +52,7 @@ export const SkillList = ({ list, skillEngine }: Props) => {
                 />
                 <input
                   type="checkbox"
-                  checked={skill.occupational ?? false}
+                  checked={skill.occupational}
                   onChange={(e) =>
                     onOccupationalToggle(skill, e.target.checked)
                   }
