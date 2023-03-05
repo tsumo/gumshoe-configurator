@@ -1,5 +1,5 @@
 {
-  "name": "gumshoe-generator",
+  "name": "gumshoe-configurator",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
