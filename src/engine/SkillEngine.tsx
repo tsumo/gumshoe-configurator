@@ -14,9 +14,18 @@ export class SkillEngine {
   constructor(system: SystemSkills, trigger: VoidFunction) {
     this.system = structuredClone(system);
     this.trigger = trigger;
+    this.recalculate();
   }
 
   private recalculate() {
+    this.system.general.skills.forEach((skill) =>
+      this.updateSkillTotalValue(skill)
+    );
+
+    this.system.investigative.branches.forEach((branch) =>
+      branch.skills.forEach((skill) => this.updateSkillTotalValue(skill))
+    );
+
     this.system.generalPoints.used = sumSkills(this.system.general);
 
     this.system.investigativePoints.used =
@@ -64,6 +73,11 @@ export class SkillEngine {
       this.findInvestigativeSkill(skillName);
     if (!skill) throw new Error(`Skill not found: ${skillName}`);
     return skill;
+  }
+
+  private updateSkillTotalValue(skill: Skill) {
+    skill.totalValue =
+      (skill.occupational ? skill.value * 2 : skill.value) + skill.freePoints;
   }
 
   incrementSkill(skillName: string) {

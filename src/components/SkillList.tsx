@@ -4,7 +4,7 @@ import { SkillEngine } from "../engine/SkillEngine";
 import { Skill, SkillList as SkillListType } from "../systems/types";
 import { Button } from "./Button";
 import s from "./styles.module.css";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
 type Props = {
   list: SkillListType;
@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const SkillList = ({ list, skillEngine }: Props) => {
-  const { lang } = useGlobalStateSnapshot();
+  const { lang, playersCount } = useGlobalStateSnapshot();
 
   const onOccupationalToggle = useCallback(
     (skill: Skill, isOccupational: boolean) => {
@@ -21,46 +21,58 @@ export const SkillList = ({ list, skillEngine }: Props) => {
     [skillEngine]
   );
 
+  const sortedSkills = useMemo(
+    () => list.skills.sort((a, b) => a[lang].localeCompare(b[lang])),
+    [lang, list.skills]
+  );
+
+  const gridRows = list.skills.length;
+  const gridColumns = playersCount + 1;
+
   return (
     <>
       <h1>{list.name[lang]}</h1>
-      <ul>
-        {list.skills
-          .sort((a, b) => a[lang].localeCompare(b[lang]))
-          .map((skill) => {
-            const totalValue =
-              (skill.occupational ? skill.value * 2 : skill.value) +
-              skill.freePoints;
-            return (
-              <li key={skill[lang]}>
-                <span
-                  className={clsx(
-                    skill.freePoints !== 0 && s.underlined,
-                    skill.occupational && s.bold,
-                    totalValue === 0 && s.muted
-                  )}
-                >
-                  {skill[lang]}: {totalValue}
-                </span>
-                <Button
-                  onClick={() => skillEngine.decrementSkill(skill["en"])}
-                  text="-"
-                />
-                <Button
-                  onClick={() => skillEngine.incrementSkill(skill["en"])}
-                  text="+"
-                />
-                <input
-                  type="checkbox"
-                  checked={skill.occupational}
-                  onChange={(e) =>
-                    onOccupationalToggle(skill, e.target.checked)
-                  }
-                />
-              </li>
-            );
-          })}
-      </ul>
+
+      <div
+        className={s.skillListContainer}
+        style={{
+          gridTemplateRows: `repeat(${gridRows}, 1fr)`,
+          gridTemplateColumns: `repeat(${gridColumns}, max-content)`,
+        }}
+      >
+        {sortedSkills.map((skill) => (
+          <div key={skill.en} className={s.skillName}>
+            <span className={s.skillValue}>{skill[lang]}</span>
+          </div>
+        ))}
+
+        {sortedSkills.map((skill) => (
+          <div key={skill.en}>
+            <Button
+              onClick={() => skillEngine.decrementSkill(skill["en"])}
+              text="-"
+            />
+            <span
+              className={clsx(
+                s.number,
+                skill.freePoints !== 0 && s.bold,
+                skill.totalValue === 0 && s.muted
+              )}
+            >
+              {skill.totalValue}
+            </span>
+            <Button
+              onClick={() => skillEngine.incrementSkill(skill["en"])}
+              text="+"
+            />
+            <input
+              type="checkbox"
+              checked={skill.occupational}
+              onChange={(e) => onOccupationalToggle(skill, e.target.checked)}
+            />
+          </div>
+        ))}
+      </div>
     </>
   );
 };

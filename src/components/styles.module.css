@@ -1,18 +1,26 @@
-.underlined {
-  text-decoration: underline;
-}
+/* COMMON */
 
 .bold {
   font-weight: bold;
 }
 
 .muted {
-  opacity: 0.6;
+  opacity: 0.3;
 }
 
 .warning {
   background-color: yellow;
 }
+
+.number {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+  display: inline-block;
+  min-width: 2ch;
+  text-align: end;
+}
+
+/* CONFIG PANEL */
 
 .configPanel {
   position: sticky;
@@ -23,14 +31,39 @@
   box-shadow: 0 5px 15px rgb(208, 208, 208);
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 16px;
 }
 
+/* CHARACTER */
+
 .character {
-  margin: 0 12px;
+  margin: 0 12px 12px;
 }
+
+/* BUTTON */
 
 .button {
   padding: 0 6px;
   margin: 0 4px;
+}
+
+/* SKILL LIST */
+
+.skillListContainer {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 4px;
+}
+
+.skillValue {
+  float: left;
+  margin-right: 4px;
+}
+
+.skillName:after {
+  content: "";
+  border-bottom: dotted 2px rgb(165, 165, 165);
+  display: block;
+  overflow: hidden;
+  height: 0.85em;
 }

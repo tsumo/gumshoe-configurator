@@ -8,6 +8,7 @@ export type Skill = Term & {
   value: number;
   freePoints: number;
   occupational: boolean;
+  totalValue: number;
 };
 
 export type SkillList = { name: Term; skills: Skill[] };
@@ -32,4 +33,5 @@ export const convertSkillTemplatesToSkills = (
     freePoints: t.freePoints ?? 0,
     value: 0,
     occupational: false,
+    totalValue: t.freePoints ?? 0,
   }));
