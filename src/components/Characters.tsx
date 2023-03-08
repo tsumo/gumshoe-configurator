@@ -3,6 +3,7 @@ import { Fragment } from 'react'
 import { Player, SkillEngine } from '../engine/SkillEngine'
 import { useGlobalStateSnapshot } from '../global-state'
 import { Skill } from '../systems/types'
+import { uiDict } from '../ui-dict'
 import { Button } from './Button'
 import s from './styles.module.css'
 
@@ -17,6 +18,8 @@ const SkillName = ({ name }: { name: string }) => (
 )
 
 const SkillValueList = ({ player, skills }: { player: Player; skills: Skill[] }) => {
+  const { lang } = useGlobalStateSnapshot()
+
   return (
     <>
       <div />
@@ -37,6 +40,7 @@ const SkillValueList = ({ player, skills }: { player: Player; skills: Skill[] })
             type='checkbox'
             checked={skill.occupational}
             onChange={(e) => player.setOccupationalSkill(skill.en, e.target.checked)}
+            title={uiDict.setOccupationalSkill[lang]}
           />
         </div>
       ))}
