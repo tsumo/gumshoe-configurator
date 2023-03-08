@@ -6,6 +6,8 @@ type GlobalState = {
   playersCount: number;
 };
 
-export const globalState = proxy<GlobalState>({ lang: "ru", playersCount: 2 });
+const lang: Language = /^ru\b/.test(navigator.language) ? "ru" : "en";
+
+export const globalState = proxy<GlobalState>({ lang, playersCount: 2 });
 
 export const useGlobalStateSnapshot = () => useSnapshot(globalState);

@@ -34,7 +34,7 @@ export const ConfigPanel = ({ skillEngine }: Props) => {
     <div className={s.configPanel}>
       <div>
         <span>{uiDict.language[lang]}: </span>
-        <select onChange={onLangSelect} defaultValue="ru">
+        <select onChange={onLangSelect} defaultValue={lang}>
           <option value="en">EN</option>
           <option value="ru">RU</option>
         </select>
