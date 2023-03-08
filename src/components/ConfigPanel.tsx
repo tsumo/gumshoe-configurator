@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import clsx from 'clsx'
 import { SkillEngine } from '../engine/SkillEngine'
 import { globalState, useGlobalStateSnapshot } from '../global-state'
 import { uiDict } from '../ui-dict'
@@ -11,7 +10,7 @@ type Props = {
 }
 
 export const ConfigPanel = ({ skillEngine }: Props) => {
-  const { lang, playersCount } = useGlobalStateSnapshot()
+  const { lang } = useGlobalStateSnapshot()
 
   const onLangSelect = useCallback<React.ChangeEventHandler<HTMLSelectElement>>((e) => {
     if (e.target.value === 'en' || e.target.value === 'ru') {
@@ -20,12 +19,14 @@ export const ConfigPanel = ({ skillEngine }: Props) => {
   }, [])
 
   const incrementPlayersCount = useCallback(() => {
-    globalState.playersCount += 1
-  }, [])
+    skillEngine.addPlayer()
+  }, [skillEngine])
 
   const decrementPlayersCount = useCallback(() => {
-    globalState.playersCount = Math.max(2, playersCount - 1)
-  }, [playersCount])
+    if (skillEngine.players.length > 2) {
+      skillEngine.removePlayer()
+    }
+  }, [skillEngine])
 
   return (
     <div className={s.configPanel}>
@@ -40,11 +41,11 @@ export const ConfigPanel = ({ skillEngine }: Props) => {
       <div>
         <span>{uiDict.playersCount[lang]}: </span>
         <Button text='-' onClick={decrementPlayersCount} />
-        <span className={s.number}>{playersCount}</span>
+        <span className={s.number}>{skillEngine.players.length}</span>
         <Button text='+' onClick={incrementPlayersCount} />
       </div>
 
-      <div className={clsx(skillEngine.notEnoughGeneralPoints && s.warning)}>
+      {/* <div className={clsx(skillEngine.notEnoughGeneralPoints && s.warning)}>
         {skillEngine.system.general.name[lang]}{' '}
         <span className={s.number}>{skillEngine.system.generalPoints.used}</span>
         <span> / </span>
@@ -56,7 +57,7 @@ export const ConfigPanel = ({ skillEngine }: Props) => {
         <span className={s.number}>{skillEngine.system.investigativePoints.used}</span>
         <span> / </span>
         <span className={s.number}>{skillEngine.system.investigativePoints.available}</span>
-      </div>
+      </div> */}
     </div>
   )
 }

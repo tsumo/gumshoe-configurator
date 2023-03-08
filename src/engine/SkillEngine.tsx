@@ -1,30 +1,67 @@
 import { useEffect, useReducer, useState } from 'react'
 import { useGlobalStateSnapshot } from '../global-state'
 import { Language, Skill, SkillList, SystemSkills } from '../systems/types'
+import { randomStr, range } from '../utils'
 
 const sumSkills = (list: SkillList): number =>
   list.skills.reduce((prev, curr) => prev + curr.value, 0)
 
+const DEFAULT_PLAYER_COUNT = 2
+
 export class SkillEngine {
-  readonly system: SystemSkills
+  readonly systemTemplate: SystemSkills
   readonly trigger: VoidFunction
   readonly skillCount: number
-  private lang: Language
-  playersCount = 2
+  lang: Language
   notEnoughGeneralPoints = false
   notEnoughInvestigativePoints = false
 
+  players: Player[]
+
   constructor(system: SystemSkills, lang: Language, trigger: VoidFunction) {
-    this.system = structuredClone(system)
+    this.systemTemplate = structuredClone(system)
     this.lang = lang
     this.trigger = trigger
     this.skillCount =
       system.general.skills.length +
       system.investigative.branches.reduce((prev, curr) => prev + curr.skills.length, 0)
-    this.recalculate()
+    this.players = range(DEFAULT_PLAYER_COUNT).map(() => new Player(this, structuredClone(system)))
+    this.players.forEach((p) => p.recalculate())
   }
 
-  private recalculate() {
+  addPlayer() {
+    this.players.push(new Player(this, structuredClone(this.systemTemplate)))
+    this.players.forEach((p) => p.recalculate())
+  }
+
+  removePlayer() {
+    if (this.players.length === 1) {
+      throw new Error('Cannot delete last player')
+    }
+    this.players.pop()
+    this.players.forEach((p) => p.recalculate())
+  }
+
+  setLanguage(lang: Language) {
+    this.lang = lang
+    this.players.forEach((p) => p.recalculate())
+  }
+}
+
+export class Player {
+  readonly parent: SkillEngine
+  readonly system: SystemSkills
+  readonly randomId: string
+  notEnoughGeneralPoints = false
+  notEnoughInvestigativePoints = false
+
+  constructor(parent: SkillEngine, system: SystemSkills) {
+    this.parent = parent
+    this.system = structuredClone(system)
+    this.randomId = randomStr()
+  }
+
+  recalculate() {
     this.sortSkills(this.system.general.skills)
 
     this.system.investigative.branches.forEach((branch) => this.sortSkills(branch.skills))
@@ -46,16 +83,24 @@ export class SkillEngine {
       this.system.generalPoints.used > this.system.generalPoints.available
 
     this.system.investigativePoints.available =
-      this.playersCount <= 2
+      this.parent.players.length <= 2
         ? this.system.investigativePoints.playersToPoints[2]
-        : this.playersCount === 3
+        : this.parent.players.length === 3
         ? this.system.investigativePoints.playersToPoints[3]
         : this.system.investigativePoints.playersToPoints['4plus']
 
     this.notEnoughInvestigativePoints =
       this.system.investigativePoints.used > this.system.investigativePoints.available
 
-    this.trigger()
+    this.parent.trigger()
+  }
+
+  private updateSkillTotalValue(skill: Skill) {
+    skill.totalValue = (skill.occupational ? skill.value * 2 : skill.value) + skill.freePoints
+  }
+
+  private sortSkills(skills: Skill[]) {
+    skills.sort((a, b) => a[this.parent.lang].localeCompare(b[this.parent.lang]))
   }
 
   private findGeneralSkill(skillName: string): Skill | undefined {
@@ -80,14 +125,6 @@ export class SkillEngine {
     return skill
   }
 
-  private updateSkillTotalValue(skill: Skill) {
-    skill.totalValue = (skill.occupational ? skill.value * 2 : skill.value) + skill.freePoints
-  }
-
-  private sortSkills(skills: Skill[]) {
-    skills.sort((a, b) => a[this.lang].localeCompare(b[this.lang]))
-  }
-
   incrementSkill(skillName: string) {
     const skill = this.findSkill(skillName)
     skill.value += 1
@@ -100,27 +137,17 @@ export class SkillEngine {
     this.recalculate()
   }
 
-  setPlayersCount(n: number) {
-    this.playersCount = n
-    this.recalculate()
-  }
-
   setOccupationalSkill(skillName: string, isOccupational: boolean) {
     const skill = this.findSkill(skillName)
     skill.occupational = isOccupational
-    this.recalculate()
-  }
-
-  setLanguage(lang: Language) {
-    this.lang = lang
     this.recalculate()
   }
 }
 
 export const useSkillEngine = (system: SystemSkills) => {
   const { lang } = useGlobalStateSnapshot()
-  const reducer = useReducer((prev) => prev + 1, 0)
-  const [skillEngine] = useState(() => new SkillEngine(system, lang, reducer[1]))
+  const [_, trigger] = useReducer((prev) => prev + 1, 0)
+  const [skillEngine] = useState(() => new SkillEngine(system, lang, trigger))
 
   useEffect(() => {
     skillEngine.setLanguage(lang)

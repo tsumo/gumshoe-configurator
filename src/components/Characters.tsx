@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { Fragment } from 'react'
-import { SkillEngine } from '../engine/SkillEngine'
+import { Player, SkillEngine } from '../engine/SkillEngine'
 import { useGlobalStateSnapshot } from '../global-state'
 import { Skill } from '../systems/types'
 import { Button } from './Button'
@@ -16,13 +16,13 @@ const SkillName = ({ name }: { name: string }) => (
   </div>
 )
 
-const SkillValueList = ({ skillEngine, skills }: { skillEngine: SkillEngine; skills: Skill[] }) => {
+const SkillValueList = ({ player, skills }: { player: Player; skills: Skill[] }) => {
   return (
     <>
       <div />
       {skills.map((skill) => (
         <div key={skill.en}>
-          <Button onClick={() => skillEngine.decrementSkill(skill['en'])} text='-' />
+          <Button onClick={() => player.decrementSkill(skill['en'])} text='-' />
           <span
             className={clsx(
               s.number,
@@ -32,11 +32,11 @@ const SkillValueList = ({ skillEngine, skills }: { skillEngine: SkillEngine; ski
           >
             {skill.totalValue}
           </span>
-          <Button onClick={() => skillEngine.incrementSkill(skill['en'])} text='+' />
+          <Button onClick={() => player.incrementSkill(skill['en'])} text='+' />
           <input
             type='checkbox'
             checked={skill.occupational}
-            onChange={(e) => skillEngine.setOccupationalSkill(skill.en, e.target.checked)}
+            onChange={(e) => player.setOccupationalSkill(skill.en, e.target.checked)}
           />
         </div>
       ))}
@@ -44,11 +44,12 @@ const SkillValueList = ({ skillEngine, skills }: { skillEngine: SkillEngine; ski
   )
 }
 
-export const Character = ({ skillEngine }: Props) => {
-  const { lang, playersCount } = useGlobalStateSnapshot()
+export const Characters = ({ skillEngine }: Props) => {
+  const { lang } = useGlobalStateSnapshot()
 
-  const gridRows = skillEngine.skillCount + 1 + skillEngine.system.investigative.branches.length
-  const gridColumns = playersCount + 1
+  const gridRows =
+    skillEngine.skillCount + 1 + skillEngine.systemTemplate.investigative.branches.length
+  const gridColumns = skillEngine.players.length + 1
 
   return (
     <div
@@ -58,12 +59,12 @@ export const Character = ({ skillEngine }: Props) => {
         gridTemplateColumns: `repeat(${gridColumns}, max-content)`,
       }}
     >
-      <h1>{skillEngine.system.general.name[lang]}</h1>
-      {skillEngine.system.general.skills.map((skill) => (
+      <h1>{skillEngine.players[0].system.general.name[lang]}</h1>
+      {skillEngine.players[0].system.general.skills.map((skill) => (
         <SkillName key={skill.en} name={skill[lang]} />
       ))}
 
-      {skillEngine.system.investigative.branches.map((list) => (
+      {skillEngine.players[0].system.investigative.branches.map((list) => (
         <Fragment key={list.name.en}>
           <h1>{list.name[lang]}</h1>
           {list.skills.map((skill) => (
@@ -72,10 +73,14 @@ export const Character = ({ skillEngine }: Props) => {
         </Fragment>
       ))}
 
-      <SkillValueList skillEngine={skillEngine} skills={skillEngine.system.general.skills} />
+      {skillEngine.players.map((player) => (
+        <Fragment key={player.randomId}>
+          <SkillValueList player={player} skills={player.system.general.skills} />
 
-      {skillEngine.system.investigative.branches.map((list) => (
-        <SkillValueList key={list.name.en} skillEngine={skillEngine} skills={list.skills} />
+          {player.system.investigative.branches.map((list) => (
+            <SkillValueList key={list.name.en} player={player} skills={list.skills} />
+          ))}
+        </Fragment>
       ))}
     </div>
   )
