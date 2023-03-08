@@ -14,6 +14,8 @@ export type Skill = Term & {
 export type SkillList = { name: Term; skills: Skill[] }
 
 export type SystemSkills = {
+  name: Term
+  notes?: Term
   general: SkillList
   investigative: { name: Term; branches: SkillList[] }
   generalPoints: { available: number; used: number; notEnough: boolean }

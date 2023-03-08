@@ -75,6 +75,11 @@ const general = [
 ] satisfies SkillTemplate[]
 
 export const trailOfCthulhu = {
+  name: { en: 'Trail of Cthulhu', ru: 'Ктулху' },
+  notes: {
+    en: 'Not implemented yet: free status points, half-price fleeing points, second highest general rating restriction',
+    ru: 'Не реализовано: бесплатные очки статуса, удвоенные очки бегства, ограничение на второй по величине общий навык',
+  },
   general: {
     name: { en: 'General', ru: 'Общие' },
     skills: convertSkillTemplatesToSkills(general),

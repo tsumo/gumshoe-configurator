@@ -44,6 +44,9 @@
 
 .character {
   margin: 0 12px 12px;
+}
+
+.skillGrid {
   display: grid;
   grid-auto-flow: column;
   gap: 4px;

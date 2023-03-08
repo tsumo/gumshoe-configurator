@@ -76,45 +76,49 @@ export const Characters = ({ skillEngine }: Props) => {
   const gridColumns = skillEngine.players.length + 1
 
   return (
-    <div
-      className={s.character}
-      style={{
-        gridTemplateRows: `repeat(${gridRows}, auto)`,
-        gridTemplateColumns: `repeat(${gridColumns}, max-content)`,
-      }}
-    >
-      <h1>{skillEngine.players[0].system.general.name[lang]}</h1>
-      {skillEngine.players[0].system.general.skills.map((skill) => (
-        <SkillName key={skill.en} name={skill[lang]} />
-      ))}
+    <div className={s.character}>
+      <div
+        className={s.skillGrid}
+        style={{
+          gridTemplateRows: `repeat(${gridRows}, auto)`,
+          gridTemplateColumns: `repeat(${gridColumns}, max-content)`,
+        }}
+      >
+        <h1>{skillEngine.players[0].system.general.name[lang]}</h1>
+        {skillEngine.players[0].system.general.skills.map((skill) => (
+          <SkillName key={skill.en} name={skill[lang]} />
+        ))}
 
-      {skillEngine.players[0].system.investigative.branches.map((list) => (
-        <Fragment key={list.name.en}>
-          <h1>{list.name[lang]}</h1>
-          {list.skills.map((skill) => (
-            <SkillName key={skill.en} name={skill[lang]} />
-          ))}
-        </Fragment>
-      ))}
+        {skillEngine.players[0].system.investigative.branches.map((list) => (
+          <Fragment key={list.name.en}>
+            <h1>{list.name[lang]}</h1>
+            {list.skills.map((skill) => (
+              <SkillName key={skill.en} name={skill[lang]} />
+            ))}
+          </Fragment>
+        ))}
 
-      {skillEngine.players.map((player) => (
-        <Fragment key={player.randomId}>
-          <SkillValueList
-            player={player}
-            skills={player.system.general.skills}
-            type='generalPoints'
-          />
-
-          {player.system.investigative.branches.map((list) => (
+        {skillEngine.players.map((player) => (
+          <Fragment key={player.randomId}>
             <SkillValueList
-              key={list.name.en}
               player={player}
-              skills={list.skills}
-              type='investigativePoints'
+              skills={player.system.general.skills}
+              type='generalPoints'
             />
-          ))}
-        </Fragment>
-      ))}
+
+            {player.system.investigative.branches.map((list) => (
+              <SkillValueList
+                key={list.name.en}
+                player={player}
+                skills={list.skills}
+                type='investigativePoints'
+              />
+            ))}
+          </Fragment>
+        ))}
+      </div>
+
+      {skillEngine.systemTemplate.notes && <p>{skillEngine.systemTemplate.notes[lang]}</p>}
     </div>
   )
 }

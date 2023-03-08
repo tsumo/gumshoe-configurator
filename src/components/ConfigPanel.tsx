@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import { SkillEngine } from '../engine/SkillEngine'
 import { globalState, useGlobalStateSnapshot } from '../global-state'
+import { trailOfCthulhu } from '../systems/trail-of-cthulhu'
 import { uiDict } from '../ui-dict'
 import { Button } from './Button'
 import s from './styles.module.css'
@@ -35,6 +36,13 @@ export const ConfigPanel = ({ skillEngine }: Props) => {
         <select onChange={onLangSelect} defaultValue={lang}>
           <option value='en'>EN</option>
           <option value='ru'>RU</option>
+        </select>
+      </div>
+
+      <div>
+        <span>{uiDict.game[lang]}: </span>
+        <select>
+          <option>{trailOfCthulhu.name[lang]}</option>
         </select>
       </div>
 
