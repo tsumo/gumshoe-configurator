@@ -13,8 +13,7 @@
 }
 
 .number {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
   display: inline-block;
   min-width: 2ch;
   text-align: end;
@@ -51,7 +50,7 @@
 }
 
 .skillNameWrapper:after {
-  content: "";
+  content: '';
   border-bottom: dotted 2px rgb(165, 165, 165);
   display: block;
   overflow: hidden;

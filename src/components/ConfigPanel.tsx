@@ -1,75 +1,62 @@
-import React, { useCallback } from "react";
-import clsx from "clsx";
-import { SkillEngine } from "../engine/SkillEngine";
-import { globalState, useGlobalStateSnapshot } from "../global-state";
-import { uiDict } from "../ui-dict";
-import { Button } from "./Button";
-import s from "./styles.module.css";
+import React, { useCallback } from 'react'
+import clsx from 'clsx'
+import { SkillEngine } from '../engine/SkillEngine'
+import { globalState, useGlobalStateSnapshot } from '../global-state'
+import { uiDict } from '../ui-dict'
+import { Button } from './Button'
+import s from './styles.module.css'
 
 type Props = {
-  skillEngine: SkillEngine;
-};
+  skillEngine: SkillEngine
+}
 
 export const ConfigPanel = ({ skillEngine }: Props) => {
-  const { lang, playersCount } = useGlobalStateSnapshot();
+  const { lang, playersCount } = useGlobalStateSnapshot()
 
-  const onLangSelect = useCallback<React.ChangeEventHandler<HTMLSelectElement>>(
-    (e) => {
-      if (e.target.value === "en" || e.target.value === "ru") {
-        globalState.lang = e.target.value;
-      }
-    },
-    []
-  );
+  const onLangSelect = useCallback<React.ChangeEventHandler<HTMLSelectElement>>((e) => {
+    if (e.target.value === 'en' || e.target.value === 'ru') {
+      globalState.lang = e.target.value
+    }
+  }, [])
 
   const incrementPlayersCount = useCallback(() => {
-    globalState.playersCount += 1;
-  }, []);
+    globalState.playersCount += 1
+  }, [])
 
   const decrementPlayersCount = useCallback(() => {
-    globalState.playersCount = Math.max(2, playersCount - 1);
-  }, [playersCount]);
+    globalState.playersCount = Math.max(2, playersCount - 1)
+  }, [playersCount])
 
   return (
     <div className={s.configPanel}>
       <div>
         <span>{uiDict.language[lang]}: </span>
         <select onChange={onLangSelect} defaultValue={lang}>
-          <option value="en">EN</option>
-          <option value="ru">RU</option>
+          <option value='en'>EN</option>
+          <option value='ru'>RU</option>
         </select>
       </div>
 
       <div>
         <span>{uiDict.playersCount[lang]}: </span>
-        <Button text="-" onClick={decrementPlayersCount} />
+        <Button text='-' onClick={decrementPlayersCount} />
         <span className={s.number}>{playersCount}</span>
-        <Button text="+" onClick={incrementPlayersCount} />
+        <Button text='+' onClick={incrementPlayersCount} />
       </div>
 
       <div className={clsx(skillEngine.notEnoughGeneralPoints && s.warning)}>
-        {skillEngine.system.general.name[lang]}{" "}
-        <span className={s.number}>
-          {skillEngine.system.generalPoints.used}
-        </span>
+        {skillEngine.system.general.name[lang]}{' '}
+        <span className={s.number}>{skillEngine.system.generalPoints.used}</span>
         <span> / </span>
-        <span className={s.number}>
-          {skillEngine.system.generalPoints.available}
-        </span>
+        <span className={s.number}>{skillEngine.system.generalPoints.available}</span>
       </div>
 
-      <div
-        className={clsx(skillEngine.notEnoughInvestigativePoints && s.warning)}
-      >
-        {skillEngine.system.investigative.name[lang]}{" "}
-        <span className={s.number}>
-          {skillEngine.system.investigativePoints.used}
-        </span>
+      <div className={clsx(skillEngine.notEnoughInvestigativePoints && s.warning)}>
+        {skillEngine.system.investigative.name[lang]}{' '}
+        <span className={s.number}>{skillEngine.system.investigativePoints.used}</span>
         <span> / </span>
-        <span className={s.number}>
-          {skillEngine.system.investigativePoints.available}
-        </span>
+        <span className={s.number}>{skillEngine.system.investigativePoints.available}</span>
       </div>
     </div>
-  );
-};
+  )
+}
