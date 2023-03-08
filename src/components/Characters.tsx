@@ -17,12 +17,32 @@ const SkillName = ({ name }: { name: string }) => (
   </div>
 )
 
-const SkillValueList = ({ player, skills }: { player: Player; skills: Skill[] }) => {
+type PointsType = 'generalPoints' | 'investigativePoints'
+
+const SkillPoints = ({ player, type }: { player: Player; type: PointsType }) => (
+  <div className={s.skillPoints}>
+    <span className={clsx(player.system[type].notEnough && s.warning)}>
+      <span className={s.number}>{player.system[type].used}</span>
+      <span> / </span>
+      <span className={s.number}>{player.system[type].available}</span>
+    </span>
+  </div>
+)
+
+const SkillValueList = ({
+  player,
+  skills,
+  type,
+}: {
+  player: Player
+  skills: Skill[]
+  type: PointsType
+}) => {
   const { lang } = useGlobalStateSnapshot()
 
   return (
     <>
-      <div />
+      <SkillPoints player={player} type={type} />
       {skills.map((skill) => (
         <div key={skill.en}>
           <Button onClick={() => player.decrementSkill(skill['en'])} text='-' />
@@ -79,10 +99,19 @@ export const Characters = ({ skillEngine }: Props) => {
 
       {skillEngine.players.map((player) => (
         <Fragment key={player.randomId}>
-          <SkillValueList player={player} skills={player.system.general.skills} />
+          <SkillValueList
+            player={player}
+            skills={player.system.general.skills}
+            type='generalPoints'
+          />
 
           {player.system.investigative.branches.map((list) => (
-            <SkillValueList key={list.name.en} player={player} skills={list.skills} />
+            <SkillValueList
+              key={list.name.en}
+              player={player}
+              skills={list.skills}
+              type='investigativePoints'
+            />
           ))}
         </Fragment>
       ))}

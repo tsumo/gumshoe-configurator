@@ -16,11 +16,12 @@ export type SkillList = { name: Term; skills: Skill[] }
 export type SystemSkills = {
   general: SkillList
   investigative: { name: Term; branches: SkillList[] }
-  generalPoints: { available: number; used: number }
+  generalPoints: { available: number; used: number; notEnough: boolean }
   investigativePoints: {
-    playersToPoints: { 2: number; 3: number; '4plus': number }
     available: number
     used: number
+    notEnough: boolean
+    playersToPoints: { 2: number; 3: number; '4plus': number }
   }
 }
 

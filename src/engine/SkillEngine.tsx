@@ -13,8 +13,6 @@ export class SkillEngine {
   readonly trigger: VoidFunction
   readonly skillCount: number
   lang: Language
-  notEnoughGeneralPoints = false
-  notEnoughInvestigativePoints = false
 
   players: Player[]
 
@@ -52,8 +50,6 @@ export class Player {
   readonly parent: SkillEngine
   readonly system: SystemSkills
   readonly randomId: string
-  notEnoughGeneralPoints = false
-  notEnoughInvestigativePoints = false
 
   constructor(parent: SkillEngine, system: SystemSkills) {
     this.parent = parent
@@ -79,7 +75,7 @@ export class Player {
       0,
     )
 
-    this.notEnoughGeneralPoints =
+    this.system.generalPoints.notEnough =
       this.system.generalPoints.used > this.system.generalPoints.available
 
     this.system.investigativePoints.available =
@@ -89,7 +85,7 @@ export class Player {
         ? this.system.investigativePoints.playersToPoints[3]
         : this.system.investigativePoints.playersToPoints['4plus']
 
-    this.notEnoughInvestigativePoints =
+    this.system.investigativePoints.notEnough =
       this.system.investigativePoints.used > this.system.investigativePoints.available
 
     this.parent.trigger()

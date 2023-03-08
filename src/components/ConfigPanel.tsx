@@ -44,20 +44,6 @@ export const ConfigPanel = ({ skillEngine }: Props) => {
         <span className={s.number}>{skillEngine.players.length}</span>
         <Button text='+' onClick={incrementPlayersCount} />
       </div>
-
-      {/* <div className={clsx(skillEngine.notEnoughGeneralPoints && s.warning)}>
-        {skillEngine.system.general.name[lang]}{' '}
-        <span className={s.number}>{skillEngine.system.generalPoints.used}</span>
-        <span> / </span>
-        <span className={s.number}>{skillEngine.system.generalPoints.available}</span>
-      </div>
-
-      <div className={clsx(skillEngine.notEnoughInvestigativePoints && s.warning)}>
-        {skillEngine.system.investigative.name[lang]}{' '}
-        <span className={s.number}>{skillEngine.system.investigativePoints.used}</span>
-        <span> / </span>
-        <span className={s.number}>{skillEngine.system.investigativePoints.available}</span>
-      </div> */}
     </div>
   )
 }

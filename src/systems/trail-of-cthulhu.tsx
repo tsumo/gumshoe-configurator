@@ -96,10 +96,11 @@ export const trailOfCthulhu = {
       },
     ],
   },
-  generalPoints: { available: 65, used: 0 },
+  generalPoints: { available: 65, used: 0, notEnough: false },
   investigativePoints: {
-    playersToPoints: { 2: 24, 3: 18, '4plus': 16 },
     available: 24,
     used: 0,
+    notEnough: false,
+    playersToPoints: { 2: 24, 3: 18, '4plus': 16 },
   },
 } satisfies SystemSkills
