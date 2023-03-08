@@ -34,12 +34,6 @@
   gap: 16px;
 }
 
-/* CHARACTER */
-
-.character {
-  margin: 0 12px 12px;
-}
-
 /* BUTTON */
 
 .button {
@@ -47,23 +41,24 @@
   margin: 0 4px;
 }
 
-/* SKILL LIST */
+/* CHARACTER */
 
-.skillListContainer {
+.character {
+  margin: 0 12px 12px;
   display: grid;
   grid-auto-flow: column;
   gap: 4px;
 }
 
-.skillValue {
-  float: left;
-  margin-right: 4px;
-}
-
-.skillName:after {
+.skillNameWrapper:after {
   content: "";
   border-bottom: dotted 2px rgb(165, 165, 165);
   display: block;
   overflow: hidden;
   height: 0.85em;
+}
+
+.skillName {
+  float: left;
+  margin-right: 4px;
 }

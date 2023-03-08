@@ -1,8 +1,8 @@
 import { proxy, useSnapshot } from "valtio";
-import { Languages } from "./systems/types";
+import { Language } from "./systems/types";
 
 type GlobalState = {
-  lang: Languages;
+  lang: Language;
   playersCount: number;
 };
 

@@ -1,5 +1,6 @@
-import { useReducer, useState } from "react";
-import { Skill, SkillList, SystemSkills } from "../systems/types";
+import { useEffect, useReducer, useState } from "react";
+import { useGlobalStateSnapshot } from "../global-state";
+import { Language, Skill, SkillList, SystemSkills } from "../systems/types";
 
 const sumSkills = (list: SkillList): number =>
   list.skills.reduce((prev, curr) => prev + curr.value, 0);
@@ -7,17 +8,32 @@ const sumSkills = (list: SkillList): number =>
 export class SkillEngine {
   readonly system: SystemSkills;
   readonly trigger: VoidFunction;
+  readonly skillCount: number;
+  private lang: Language;
   playersCount = 2;
   notEnoughGeneralPoints = false;
   notEnoughInvestigativePoints = false;
 
-  constructor(system: SystemSkills, trigger: VoidFunction) {
+  constructor(system: SystemSkills, lang: Language, trigger: VoidFunction) {
     this.system = structuredClone(system);
+    this.lang = lang;
     this.trigger = trigger;
+    this.skillCount =
+      system.general.skills.length +
+      system.investigative.branches.reduce(
+        (prev, curr) => prev + curr.skills.length,
+        0
+      );
     this.recalculate();
   }
 
   private recalculate() {
+    this.sortSkills(this.system.general.skills);
+
+    this.system.investigative.branches.forEach((branch) =>
+      this.sortSkills(branch.skills)
+    );
+
     this.system.general.skills.forEach((skill) =>
       this.updateSkillTotalValue(skill)
     );
@@ -80,6 +96,10 @@ export class SkillEngine {
       (skill.occupational ? skill.value * 2 : skill.value) + skill.freePoints;
   }
 
+  private sortSkills(skills: Skill[]) {
+    skills.sort((a, b) => a[this.lang].localeCompare(b[this.lang]));
+  }
+
   incrementSkill(skillName: string) {
     const skill = this.findSkill(skillName);
     skill.value += 1;
@@ -102,10 +122,23 @@ export class SkillEngine {
     skill.occupational = isOccupational;
     this.recalculate();
   }
+
+  setLanguage(lang: Language) {
+    this.lang = lang;
+    this.recalculate();
+  }
 }
 
 export const useSkillEngine = (system: SystemSkills) => {
+  const { lang } = useGlobalStateSnapshot();
   const reducer = useReducer((prev) => prev + 1, 0);
-  const [skillEngine] = useState(() => new SkillEngine(system, reducer[1]));
+  const [skillEngine] = useState(
+    () => new SkillEngine(system, lang, reducer[1])
+  );
+
+  useEffect(() => {
+    skillEngine.setLanguage(lang);
+  }, [skillEngine, lang]);
+
   return skillEngine;
 };

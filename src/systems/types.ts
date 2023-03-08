@@ -1,6 +1,6 @@
-export type Languages = "en" | "ru";
+export type Language = "en" | "ru";
 
-export type Term = Record<Languages, string>;
+export type Term = Record<Language, string>;
 
 export type SkillTemplate = Term & { freePoints?: number };
 
