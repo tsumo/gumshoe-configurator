@@ -65,5 +65,9 @@
 .skillPoints {
   display: flex;
   align-items: flex-end;
-  justify-content: end;
+  justify-content: flex-end;
+}
+
+.skillColumnMargin {
+  margin-right: 16px;
 }

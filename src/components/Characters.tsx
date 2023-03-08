@@ -20,7 +20,7 @@ const SkillName = ({ name }: { name: string }) => (
 type PointsType = 'generalPoints' | 'investigativePoints'
 
 const SkillPoints = ({ player, type }: { player: Player; type: PointsType }) => (
-  <div className={s.skillPoints}>
+  <div className={clsx(s.skillPoints, s.skillColumnMargin)}>
     <span className={clsx(player.system[type].notEnough && s.warning)}>
       <span className={s.number}>{player.system[type].used}</span>
       <span> / </span>
@@ -44,7 +44,7 @@ const SkillValueList = ({
     <>
       <SkillPoints player={player} type={type} />
       {skills.map((skill) => (
-        <div key={skill.en}>
+        <div key={skill.en} className={s.skillColumnMargin}>
           <Button onClick={() => player.decrementSkill(skill['en'])} text='-' />
           <span
             className={clsx(
